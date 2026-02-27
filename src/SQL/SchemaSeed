@@ -1,0 +1,141 @@
+create database monikas_hairdresser;
+
+create table employee_info (
+employee_id int primary key auto_increment,
+employee_name varchar(50) not null,
+employee_email varchar(50) not null,
+unique (employee_email)
+);
+
+create table employee_login (
+employee_id int primary key,
+employee_username varchar(50) not null,
+employee_password varchar(50) not null,
+unique (employee_username),
+foreign key (employee_id) references employee_info(employee_id)
+);
+
+//-------------Altering to make password case-sensitive (instead of default case-insensitive)-------------
+ALTER TABLE employee_login
+MODIFY employee_password VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+//Inserting employees
+insert into employee_info (employee_name, employee_email)
+values ('Monika Klipfisk', 'monika@haarmonika.dk');
+
+insert into employee_info (employee_name, employee_email)
+values ('Susanne Larsen', 'susanne@haarmonika.dk');
+
+insert into employee_info (employee_name, employee_email)
+values ('Jytte Sørensen', 'jytte@haarmonika.dk');
+
+insert into employee_info (employee_name, employee_email)
+values ('Susanne Poulsen', 'susannep@haarmonika.dk');
+
+insert into employee_info (employee_name, employee_email)
+values ('Malthe Mikmak', 'malthe@haarmonika.dk');
+
+
+//Inserting employee logins
+insert into employee_login (employee_id, employee_username, employee_password)
+values (1,'Monika', 'secret');
+
+insert into employee_login (employee_id, employee_username, employee_password)
+values (2,'Susanne', 'password');
+
+insert into employee_login (employee_id, employee_username, employee_password)
+values (3,'Jytte', '1234');
+
+insert into employee_login (employee_id, employee_username, employee_password)
+values (4,'SusanneP', 'YOLO-we34h!');
+
+insert into employee_login (employee_id, employee_username, employee_password)
+values (5,'Malthe', '98765432');
+
+//Create customer table
+create table customer_info (
+customer_id int primary key auto_increment,
+customer_name varchar(50) not null,
+customer_phone varchar(50) not null
+);
+-- intentionally haven't made phone number unique, in case two customers in the same family uses the same contact phone number
+
+//Insert customer
+insert into customer_info (customer_name, customer_phone)
+values ('Peter Leasy', "88 88 88 88");
+
+insert into customer_info (customer_name, customer_phone)
+values ('Lars Larsen', "70 80 81 90");
+
+
+//Create haircut table
+create table haircut (
+haircut_id int primary key auto_increment,
+haircut_name varchar(50) not null,
+haircut_price double not null,
+haircut_duration int not null
+);
+
+//Insert haircuts
+insert into haircut (haircut_name, haircut_price, haircut_duration)
+values ('no haircut',  400, 45);
+
+insert into haircut (haircut_name, haircut_price, haircut_duration)
+values ('no haircut',  280, 30);
+
+insert into haircut (haircut_name, haircut_price, haircut_duration)
+values ('no haircut',  250, 30);
+
+insert into haircut (haircut_name, haircut_price, haircut_duration)
+values ('no haircut',  70, 10);
+
+insert into haircut (haircut_name, haircut_price, haircut_duration)
+values ('no haircut',  0, 0);
+
+//Create treatment table
+CREATE TABLE treatment (
+ treatment_id INT NOT NULL primary key auto_increment,
+ treatment_name varchar(50) NOT NULL,
+ treatment_price double NOT NULL,
+ treatment_duration int NOT NULL
+ );
+
+ //Insert treatments
+ insert into treatment (treatment_name, treatment_price, treatment_duration)
+ values ('bleaching',  160, 30);
+
+ insert into treatment (treatment_name, treatment_price, treatment_duration)
+ values ('bleaching', 230, 45);
+
+ insert into treatment (treatment_name, treatment_price, treatment_duration)
+ values ('bleaching',  800, 120);
+
+ insert into treatment (treatment_name, treatment_price, treatment_duration)
+ values ('bleaching',  1000, 165);
+
+//Create booking table
+create table bookings (
+booking_id int primary key auto_increment,
+booking_employee int not null,
+booking_customer int not null,
+booking_haircut int not null,
+booking_duration int not null DEFAULT 0,
+booking_price double not NULL default 0,
+booking_paid int not null,
+booking_status ENUM('awiting', 'completed', 'cancelled') not null,
+booking_date date,
+booking_time time,
+booking_creation_date datetime,
+foreign key (booking_employee) references employee_info(employee_id),
+foreign key (booking_customer) references customer_info(customer_id),
+foreign key (booking_haircut) references haircut (haircut_id)
+);
+
+//Creating combined-key booking-treatment table
+CREATE TABLE booking_treatment (
+ booking_id INT NOT NULL,
+ treatment_id INT NOT NULL,
+ PRIMARY KEY (booking_id, treatment_id),
+ CONSTRAINT fk_bt_booking FOREIGN KEY (booking_id) REFERENCES bookings(booking_id),
+ CONSTRAINT fk_bt_treatment FOREIGN KEY (treatment_id) REFERENCES treatment(treatment_id)
+ );
