@@ -15,6 +15,10 @@ public class Employee {
         return name;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return name;

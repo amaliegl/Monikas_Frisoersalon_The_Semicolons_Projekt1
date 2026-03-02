@@ -30,4 +30,8 @@ public class Treatment {
     public int getDuration() {
         return duration;
     }
+
+    public int getId() {
+        return id;
+    }
 }

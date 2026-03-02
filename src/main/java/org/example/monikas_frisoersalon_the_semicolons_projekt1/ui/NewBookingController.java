@@ -46,10 +46,12 @@ public class NewBookingController {
     @FXML private CheckBox dyeingCheck;
     @FXML private CheckBox maskCheck;
     @FXML private CheckBox bleachingCheck;
-    
+    @FXML private CheckBox paidCheck;
+
     @FXML private Label priceLabel;
     @FXML private Label durationLabel;
     @FXML private Label newCustomerLabel;
+    @FXML private Label addBookingLabel;
 
     @FXML private TextField nameTextField;
     @FXML private TextField phoneTextField;

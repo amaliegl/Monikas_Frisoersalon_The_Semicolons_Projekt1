@@ -19,6 +19,10 @@ public class Customer {
         return phoneNumber;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +

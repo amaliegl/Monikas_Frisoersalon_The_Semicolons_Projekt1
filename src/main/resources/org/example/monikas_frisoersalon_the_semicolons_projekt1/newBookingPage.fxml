@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="345.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.monikas_frisoersalon_the_semicolons_projekt1.ui.NewBookingController">
+<AnchorPane prefHeight="486.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.monikas_frisoersalon_the_semicolons_projekt1.ui.NewBookingController">
    <children>
       <VBox prefHeight="34.0" prefWidth="522.0">
          <children>
@@ -46,9 +46,9 @@
                   <ChoiceBox fx:id="hairdresserChoice" prefHeight="25.0" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Choose haircut:" />
                   <Label text="Choose hairdresser:" GridPane.rowIndex="1" />
-                  <ChoiceBox prefHeight="25.0" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <ChoiceBox fx:id="timeChoiceBox" onMouseClicked="#onChooseTimeClick" prefHeight="25.0" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Choose time:" GridPane.rowIndex="3" />
-                  <DatePicker prefHeight="25.0" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Choose date:" GridPane.rowIndex="2" />
                </children>
                <padding>
@@ -85,12 +85,12 @@
          </padding>
       </HBox>
       <Line endX="456.0" layoutX="120.0" layoutY="150.0" startX="-100.0" />
-      <HBox layoutX="19.0" layoutY="150.0" prefHeight="143.0" prefWidth="575.0">
+      <HBox layoutX="19.0" layoutY="150.0" prefHeight="242.0" prefWidth="575.0">
          <children>
             <VBox prefHeight="100.0" prefWidth="208.0">
                <children>
                   <Label text="Excisting customer" />
-                  <TableView fx:id="customerTable" prefHeight="86.0" prefWidth="208.0">
+                  <TableView fx:id="customerTable" prefHeight="180.0" prefWidth="259.0">
                     <columns>
                       <TableColumn fx:id="nameColumn" prefWidth="101.0" text="Name" />
                       <TableColumn fx:id="phoneColumn" prefWidth="107.0" text="Phone" />
@@ -99,7 +99,7 @@
                   <TextField fx:id="phoneSearchTextField" onAction="#onSearchPhoneAction" promptText="search by phone" />
                </children>
             </VBox>
-            <VBox prefHeight="116.0" prefWidth="218.0">
+            <VBox prefHeight="222.0" prefWidth="217.0">
                <children>
                   <Label text="New customer" />
                   <GridPane prefHeight="116.0" prefWidth="218.0">
@@ -133,17 +133,19 @@
             <Insets bottom="10.0" top="10.0" />
          </padding>
       </HBox>
-      <Line endX="456.0" layoutX="120.0" layoutY="293.0" startX="-100.0" />
-      <HBox layoutX="20.0" layoutY="300.0" prefHeight="25.0" prefWidth="200.0">
+      <Line endX="456.0" layoutX="120.0" layoutY="426.0" startX="-100.0" />
+      <HBox layoutX="19.0" layoutY="434.0" prefHeight="25.0" prefWidth="489.0">
          <children>
-            <Button mnemonicParsing="false" text="Add booking" />
-            <Label />
+            <Button mnemonicParsing="false" onAction="#onAddBookingClick" text="Add booking" />
+            <CheckBox fx:id="paidCheck" mnemonicParsing="false" prefHeight="17.0" prefWidth="55.0" text="Paid">
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin>
+            </CheckBox>
+            <Label fx:id="addBookingLabel" prefHeight="17.0" prefWidth="309.0" />
          </children>
       </HBox>
-      <HBox layoutX="516.0" layoutY="300.0" prefHeight="25.0" prefWidth="73.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#onGoBackButtonClick" prefHeight="32.0" prefWidth="60.0" text="Go back" />
-         </children>
-      </HBox>
+      <HBox layoutX="516.0" layoutY="300.0" prefHeight="25.0" prefWidth="73.0" />
+      <Button layoutX="518.0" layoutY="434.0" mnemonicParsing="false" onAction="#onGoBackButtonClick" prefHeight="32.0" prefWidth="60.0" text="Go back" />
    </children>
 </AnchorPane>
