@@ -6,6 +6,7 @@ module org.example.monikas_frisoersalon_the_semicolons_projekt1 {
     requires java.sql;
 
 
+
     opens org.example.monikas_frisoersalon_the_semicolons_projekt1 to javafx.fxml;
     exports org.example.monikas_frisoersalon_the_semicolons_projekt1;
     exports org.example.monikas_frisoersalon_the_semicolons_projekt1.ui;
