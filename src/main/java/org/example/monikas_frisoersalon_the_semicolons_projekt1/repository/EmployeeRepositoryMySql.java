@@ -69,6 +69,29 @@ public class EmployeeRepositoryMySql {
         }
     }
 
+    public Employee findById(int id){
+        String sql = "SELECT * FROM employee_info WHERE employee_id = ?";
+
+        try(Connection con = db.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Employee(
+                            rs.getInt("employee_id"),
+                            rs.getString("employee_name"),
+                            rs.getString("employee_email"));
+                }else {
+                throw new DataAccessException("Could not find employee");
+                }
+            }
+
+        }catch (Exception e){
+            throw new DataAccessException("Error in findById");
+        }
+    }
+
     private Employee mapRow(ResultSet rs) throws SQLException {
         return new Employee(rs.getInt("employee_id"), rs.getString("employee_name"), rs.getString("employee_email"));
     }

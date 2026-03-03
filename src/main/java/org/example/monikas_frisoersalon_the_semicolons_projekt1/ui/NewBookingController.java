@@ -382,7 +382,23 @@ public class NewBookingController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //TODO - til test
+        try {
+            List<Booking> bookings = bookingService.findAwaitingBookingsForEmployeeOnDate(chosenEmployee, chosenDate);
+            if (bookings.size() > 0) {
+                for (int i = 0; i < bookings.size(); i++) {
+                    System.out.println(bookings.get(i));
+                }
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
+
+    /*
+    getAllByEmployeeAndDate
+     */
 
 
             /*

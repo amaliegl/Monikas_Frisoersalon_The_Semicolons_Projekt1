@@ -5,18 +5,27 @@ import org.example.monikas_frisoersalon_the_semicolons_projekt1.infrastructure.D
 import org.example.monikas_frisoersalon_the_semicolons_projekt1.model.*;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.time.LocalTime.now;
 
 public class BookingRepositoryMySql {
     private final DbConfig db;
+    private EmployeeRepositoryMySql employeeRepo;
+    private CustomerRepositoryMySql customerRepo;
+    private HaircutRepositoryMySql haircutRepo;
 
     public BookingRepositoryMySql(DbConfig db) {
         this.db = db;
+        employeeRepo = new EmployeeRepositoryMySql(this.db);
+        customerRepo = new CustomerRepositoryMySql(this.db);
+        haircutRepo = new HaircutRepositoryMySql(this.db);
     }
 
     //return id (int) of created booking
@@ -74,8 +83,53 @@ public class BookingRepositoryMySql {
         } catch (Exception e) {
             throw new DataAccessException("Error in addTreatmentsToBooking()", e);
         }
-
     }
+
+    public List<Booking> getAllAwaitingByEmployeeAndDate(Employee employee, LocalDate date) {
+        String sql = "SELECT * FROM bookings WHERE " +
+                "booking_employee = ? AND booking_date = ? AND booking_status = 'awaiting'";
+
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, employee.getId());
+            ps.setDate(2, Date.valueOf(date));
+
+            List<Booking> bookings = new ArrayList<>();
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapBooking(rs));
+                }
+            }
+            return bookings;
+
+        } catch (Exception e) {
+            throw new DataAccessException("Error in getAllAwaitingByEmployeeAndDate()", e);
+        }
+    }
+
+    private Booking mapBooking(ResultSet rs) throws SQLException {
+        boolean paid;
+        if (rs.getInt("booking_paid") == 1) {
+            paid = true;
+        } else {
+            paid = false;
+        }
+
+        return new Booking(rs.getInt("booking_id"),
+                employeeRepo.findById(rs.getInt("booking_employee")),
+                customerRepo.findById(rs.getInt("booking_customer")),
+                haircutRepo.findById(rs.getInt("booking_haircut")),
+                rs.getInt("booking_duration"),
+                rs.getDouble("booking_price"),
+                paid,
+                Status.valueOf(rs.getString("booking_status")),
+                rs.getDate("booking_date").toLocalDate(),
+                rs.getTime("booking_time").toLocalTime());
+    }
+
+
 
 }
 

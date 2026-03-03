@@ -16,19 +16,19 @@ public class CustomerRepositoryMySql {
 
     private final DbConfig db;
 
-    public CustomerRepositoryMySql(DbConfig db){
+    public CustomerRepositoryMySql(DbConfig db) {
         this.db = db;
     }
 
-    public List<Customer> findAllCustomers(){
+    public List<Customer> findAllCustomers() {
         String sql = "SELECT * FROM customer_info";
         List<Customer> customers = new ArrayList<>();
 
         try (Connection con = db.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()){
+             ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()){
+            while (rs.next()) {
                 customers.add(mapRow(rs));
             }
 
@@ -44,7 +44,7 @@ public class CustomerRepositoryMySql {
                 "(?, ?)";
 
         try (Connection con = db.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, name);
             ps.setString(2, phone);
@@ -66,10 +66,10 @@ public class CustomerRepositoryMySql {
             ps.setString(2, phone);
 
             ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    System.out.println("Vi er nu i 'der er en næste'");
-                    return false;
-                }
+            if (rs.next()) {
+                System.out.println("Vi er nu i 'der er en næste'");
+                return false;
+            }
 
             /*try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -84,9 +84,28 @@ public class CustomerRepositoryMySql {
         return true;
     }
 
-        private Customer mapRow (ResultSet rs) throws SQLException {
-            return new Customer(rs.getInt("customer_id"), rs.getString("customer_name"), rs.getString("customer_phone"));
+    public Customer findById(int id) {
+        String sql = "SELECT * FROM customer_info WHERE customer_id = ?";
+
+        try (Connection con = db.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Error in findById() for customers", e);
         }
+        return null;
+    }
+
+    private Customer mapRow(ResultSet rs) throws SQLException {
+        return new Customer(rs.getInt("customer_id"), rs.getString("customer_name"), rs.getString("customer_phone"));
+    }
 
 
 }

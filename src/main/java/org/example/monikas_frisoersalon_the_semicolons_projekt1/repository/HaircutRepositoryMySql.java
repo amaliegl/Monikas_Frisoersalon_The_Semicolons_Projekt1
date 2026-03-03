@@ -36,11 +36,29 @@ public class HaircutRepositoryMySql {
         }
 
         return haircuts;
+    }
 
+    public Haircut findById(int id) {
+        String sql = "SELECT * FROM haircut WHERE haircut_id = ?";
+
+        try (Connection con = db.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new DataAccessException("Error in findById() for haircuts", e);
+        }
+        return null;
     }
 
     private Haircut mapRow(ResultSet rs) throws SQLException {
         return new Haircut(rs.getInt("haircut_id"), rs.getString("haircut_name"), rs.getDouble("haircut_price"), rs.getInt("haircut_duration"));
     }
-
 }
